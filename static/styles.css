@@ -1,0 +1,28 @@
+body {
+    background: linear-gradient(to right, #e0f7fa, #e1f5fe);
+    font-family: 'Segoe UI', sans-serif;
+}
+
+.container {
+    max-width: 700px;
+}
+
+h2 {
+    color: #00796b;
+    font-weight: 600;
+}
+
+.card {
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    border-left: 5px solid #0288d1;
+}
+
+.btn-primary {
+    background-color: #0288d1;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #01579b;
+}
