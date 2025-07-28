@@ -1,7 +1,7 @@
 Flask
+Flask-SQLAlchemy
 gunicorn
-PyPDF2
-python-docx
-scikit-learn
-pandas
 nltk
+scikit-learn
+spacy
+python-dotenv
