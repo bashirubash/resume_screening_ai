@@ -1,35 +1,42 @@
-from sentence_transformers import SentenceTransformer, util
 import json
-import os
+import nltk
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
-model = SentenceTransformer('all-MiniLM-L6-v2')
+nltk.download('punkt')
+nltk.download('stopwords')
+from nltk.corpus import stopwords
 
-# Load job descriptions
-JOB_FILE = 'data/job_descriptions.json'
+def preprocess_text(text):
+    text = text.lower()
+    tokens = nltk.word_tokenize(text)
+    tokens = [word for word in tokens if word.isalnum() and word not in stopwords.words('english')]
+    return ' '.join(tokens)
 
 def load_job_descriptions():
-    if os.path.exists(JOB_FILE):
-        with open(JOB_FILE, 'r') as f:
-            return json.load(f)
-    return []
+    with open('sample_data/job_descriptions.json', 'r') as file:
+        return json.load(file)
 
-def match_resume_to_jobs(parsed_resume):
+def match_resume_to_jobs(resume_text):
     jobs = load_job_descriptions()
-    resume_text = parsed_resume['text']
-    resume_embedding = model.encode(resume_text, convert_to_tensor=True)
+    corpus = [preprocess_text(job["description"]) for job in jobs]
+    resume_cleaned = preprocess_text(resume_text)
+    corpus.append(resume_cleaned)
 
-    ranked_jobs = []
+    vectorizer = TfidfVectorizer()
+    vectors = vectorizer.fit_transform(corpus)
 
-    for job in jobs:
-        job_text = job['title'] + " " + job['description']
-        job_embedding = model.encode(job_text, convert_to_tensor=True)
-        score = util.cos_sim(resume_embedding, job_embedding).item()
-        ranked_jobs.append({
-            "title": job['title'],
-            "description": job['description'],
+    resume_vector = vectors[-1]
+    job_vectors = vectors[:-1]
+
+    similarities = cosine_similarity(resume_vector, job_vectors).flatten()
+    match_results = []
+
+    for idx, score in enumerate(similarities):
+        match_results.append({
+            "title": jobs[idx]["title"],
             "score": round(score * 100, 2)
         })
 
-    ranked_jobs.sort(key=lambda x: x['score'], reverse=True)
-    return ranked_jobs
-
+    # Sort by top scores
+    return sorted(match_results, key=lambda x: x['score'], reverse=True)
