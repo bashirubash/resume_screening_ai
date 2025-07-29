@@ -1,9 +1,21 @@
-Flask
-gunicorn
-pdfplumber
-python-docx
-scikit-learn
-pandas
-numpy
-nltk
-werkzeug
+Flask==2.3.3
+gunicorn==21.2.0
+
+# Resume Parsing
+pdfplumber==0.10.3
+python-docx==1.1.0
+
+# NLP + ML
+scikit-learn==1.4.2
+pandas==2.2.2
+numpy==1.26.4
+nltk==3.8.1
+
+# Web and Database
+flask_sqlalchemy==3.1.1
+flask_login==0.6.3
+werkzeug==3.0.3
+flask_wtf==1.2.1
+
+# Optional: If using password hashing
+bcrypt==4.1.2
