@@ -3,5 +3,5 @@ __pycache__/
 *.pyo
 *.db
 resumes/
-app.log
 .env
+app.log
