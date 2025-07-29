@@ -1,11 +1,10 @@
 services:
   - type: web
-    name: resume-screening-api
+    name: ai-resume-screening
     env: python
-    plan: free
-    buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app
-    runtime: python
     region: oregon
-    branch: main
-    repo: https://github.com/bashirubash/resume_screening_ai
+    plan: free
+    buildCommand: |
+      pip install --upgrade pip setuptools wheel
+      pip install --no-cache-dir -r requirements.txt
+    startCommand: gunicorn app:app
